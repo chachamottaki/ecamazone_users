@@ -1,35 +1,14 @@
 const express = require('express');
-const Sequelize = require('sequelize');
 const bcrypt = require('bcrypt');
+const db = require('./models/index');
+const User = db.User;
+const sequelize = require('./db.js');
+
+
+
 
 const app = express();
 const port = process.env.PORT || 3000;
-
-// Configuration de la connexion à la base de données MySQL avec Sequelize
-const sequelize = new Sequelize('user_microservice', 'root', 'root', {
-  host: 'localhost',
-  dialect: 'mysql',
-});
-
-// Modèle Sequelize pour la table 'users'
-const User = sequelize.define('User', {
-    username: {
-      type: Sequelize.STRING,
-    },
-    email: {
-      type: Sequelize.STRING,
-    },
-    address: {
-      type: Sequelize.STRING,
-    },
-    paymentMethod: {
-      type: Sequelize.STRING,
-    },
-    password: {
-      type: Sequelize.STRING,
-    },
-  });
-  
 
 // Synchronisez le modèle avec la base de données (créez la table si elle n'existe pas)
 sequelize.sync()
