@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
-const sequelize = new Sequelize('user_microservice', 'root', 'root', {
-    host: 'brave_tharp',
+const sequelize = new Sequelize('user_microservice', 'root', 'secret', {
+    host: 'mysql',
     dialect: 'mysql',
   });
 module.exports = sequelize
