@@ -5,27 +5,30 @@ const User = db.User;
 
 describe('API /users', () => {
     let testUserId;
+    let transaction;
 
+
+    // Avant chaque test, démarrer une transaction et créer un utilisateur de test
     beforeEach(async () => {
-      // Créer un utilisateur de test
-      const newUser = {
-        username: 'testUser',
-        email: 'test@example.com',
-        address: '123 Test Street',
-        paymentMethod: 'card',
-        password: 'password123' // Assurez-vous que le mot de passe est correctement haché si nécessaire
-      };
-  
-      const createdUser = await User.create(newUser);
-      testUserId = createdUser.id;
-    });
+      transaction = await sequelize.transaction();
+      
 
-    afterEach(async () => {
-        // Supprimer l'utilisateur de test
-        if (testUserId) {
-          await User.destroy({ where: { id: testUserId } });
-        }
-      });
+      const newUser = {
+          username: 'testUser',
+          email: 'test@example.com',
+          address: '123 Test Street',
+          paymentMethod: 'card',
+          password: 'password123' // Assurez-vous que le mot de passe est correctement haché si nécessaire
+      };
+
+      const createdUser = await User.create(newUser, { transaction });
+      testUserId = createdUser.id;
+  });
+
+  // Après chaque test, annuler la transaction pour revenir à l'état initial de la base de données
+  afterEach(async () => {
+      await transaction.rollback();
+  });
 
   it('POST /users - Créer un utilisateur', async () => {
     const newUser = {
