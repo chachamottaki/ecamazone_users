@@ -9,6 +9,8 @@
 
     const app = express();
     const port = process.env.PORT || 3000;
+    let cors = require('cors')
+app.use(cors())
 
     // Synchronisez le modèle avec la base de données (créez la table si elle n'existe pas)
     sequelize.sync()
@@ -25,26 +27,35 @@
 
     // Créer un nouvel utilisateur
     app.post('/users', async (req, res) => {
-        const { username, email, address, paymentMethod, password } = req.body;
-      
-        // Hachez le mot de passe
-        const hashedPassword = await bcrypt.hash(password, 10);
-      
-        User.create({
+      const {
+          username, fullName, email, phoneNumber, shippingAddress, billingAddress,
+          cardHolderName, cardLastFourDigits, cardExpirationDate, cardType, password
+      } = req.body;
+  
+      const hashedPassword = await bcrypt.hash(password, 10);
+  
+      User.create({
           username,
+          fullName,
           email,
-          address,
-          paymentMethod,
-          password: hashedPassword, // Stockez le mot de passe haché dans la base de données
-        })
-          .then((user) => {
-            res.status(201).json(user);
-          })
-          .catch((err) => {
-            console.error(err);
-            res.status(500).json({ error: 'Échec de la création de l\'utilisateur' });
-          });
+          phoneNumber,
+          shippingAddress,
+          billingAddress,
+          cardHolderName,
+          cardLastFourDigits,
+          cardExpirationDate,
+          cardType,
+          password: hashedPassword,
+      })
+      .then((user) => {
+          res.status(201).json(user);
+      })
+      .catch((err) => {
+          console.error(err);
+          res.status(500).json({ error: 'Échec de la création de l\'utilisateur' });
       });
+  });
+  
 
     // Récupérer un utilisateur par ID
     app.get('/users/:userId', (req, res) => {
@@ -66,23 +77,31 @@
     // Mise à jour d'un utilisateur par ID
     app.put('/users/:userId', (req, res) => {
       const userId = req.params.userId;
-      const { username, email, address, paymentMethod } = req.body;
+      const {
+          username, fullName, email, phoneNumber, shippingAddress, billingAddress,
+          cardHolderName, cardLastFourDigits, cardExpirationDate, cardType
+      } = req.body;
+  
       User.update(
-        { username, email, address, paymentMethod },
-        { where: { id: userId } }
+          {
+              username, fullName, email, phoneNumber, shippingAddress, billingAddress,
+              cardHolderName, cardLastFourDigits, cardExpirationDate, cardType
+          },
+          { where: { id: userId } }
       )
-        .then(([affectedRows]) => {
+      .then(([affectedRows]) => {
           if (affectedRows > 0) {
-            res.status(200).json({ message: 'Utilisateur mis à jour avec succès' });
+              res.status(200).json({ message: 'Utilisateur mis à jour avec succès' });
           } else {
-            res.status(404).json({ error: 'Utilisateur non trouvé' });
+              res.status(404).json({ error: 'Utilisateur non trouvé' });
           }
-        })
-        .catch((err) => {
+      })
+      .catch((err) => {
           console.error(err);
           res.status(500).json({ error: 'Erreur interne du serveur' });
-        });
-    });
+      });
+  });
+  
 
     // Supprimer un utilisateur par ID
     app.delete('/users/:userId', (req, res) => {
@@ -107,25 +126,28 @@
 
 
     // Route de connexion
-    app.post('/login', async (req, res) => {
-        const { username, password } = req.body;
-      
-        // Recherchez l'utilisateur par nom d'utilisateur
-        const user = await User.findOne({ where: { username } });
-      
-        if (!user) {
-          return res.status(404).json({ error: 'Utilisateur non trouvé' });
-        }
-      
-        // Vérifiez le mot de passe haché
-        const passwordMatch = await bcrypt.compare(password, user.password);
-      
-        if (passwordMatch) {
-          res.status(200).json({ message: 'Connexion réussie' });
-        } else {
-          res.status(401).json({ error: 'Mauvais mot de passe' });
-        }
-      });
+// Route de connexion
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+
+  // Recherchez l'utilisateur par nom d'utilisateur
+  const user = await User.findOne({ where: { username } });
+
+  if (!user) {
+    return res.status(404).json({ error: 'Utilisateur non trouvé' });
+  }
+
+  // Vérifiez le mot de passe haché
+  const passwordMatch = await bcrypt.compare(password, user.password);
+
+  if (passwordMatch) {
+    // Renvoyez l'ID de l'utilisateur dans la réponse
+    res.status(200).json({ message: 'Connexion réussie', id: user.id });
+  } else {
+    res.status(401).json({ error: 'Mauvais mot de passe' });
+  }
+});
+
       
 
     module.exports = app;

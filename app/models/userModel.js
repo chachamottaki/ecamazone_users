@@ -5,16 +5,48 @@ const db = require('../db.js')
 const User = db.define('User', {
     username: {
       type: Sequelize.STRING,
+      allowNull: false,
     },
+    fullName: {
+      type: Sequelize.STRING,
+      allowNull: false,
+  },
     email: {
       type: Sequelize.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+          isEmail: true,
+      },
     },
-    address: {
+    phoneNumber: {
       type: Sequelize.STRING,
     },
-    paymentMethod: {
+    shippingAddress: {
       type: Sequelize.STRING,
+      // Vous pouvez diviser en plusieurs champs (rue, ville, code postal, pays) si nécessaire
+  },
+  billingAddress: {
+      type: Sequelize.STRING,
+      // Vous pouvez diviser en plusieurs champs si nécessaire
+  },
+  cardHolderName: {
+    type: Sequelize.STRING,
+},
+cardLastFourDigits: {
+    type: Sequelize.STRING,
+    validate: {
+        len: [4, 4],
     },
+},
+cardExpirationDate: {
+    type: Sequelize.STRING,
+    // Valider le format de la date si nécessaire
+},
+cardType: {
+    type: Sequelize.STRING,
+    // Visa, MasterCard, etc.
+},
     password: {
       type: Sequelize.STRING,
     },
