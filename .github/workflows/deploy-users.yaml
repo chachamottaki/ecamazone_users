@@ -41,17 +41,15 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Docker image
-      run: docker build -t #docker-hub-repo/dock-image-name:latest .#
+      run: docker build -t notchai/ecamazon_users:latest .
 
     - name: Push Docker image to registry
-      run: docker push your-registry/your-node-app:latest
-        # Replace 'your-registry/your-node-app' with your Docker Hub repository and image name
+      run: docker push notchai/ecamazon_users:latest
 
     #Kubernetes
     - name: Deploy to Kubernetes
       run: |
-          kubectl apply -f path/to/node-app-deployment.yaml
-          kubectl apply -f path/to/node-app-service.yaml
+          kubectl apply -f kube.yml
           
 
   

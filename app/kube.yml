@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: users-deployment
 spec:
-  replicas: 3  # Adjust as per your need
+  replicas: 1  # Adjust later if needed
   selector:
     matchLabels:
       app: users
