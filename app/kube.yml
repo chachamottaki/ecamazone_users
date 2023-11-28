@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: users-deployment
+spec:
+  replicas: 1  # Adjust later if needed
+  selector:
+    matchLabels:
+      app: users
+  template:
+    metadata:
+      labels:
+        app: users
+    spec:
+      containers:
+        - name: users-container
+          image:   # Docker image
+          ports:
+            - containerPort: 3000  # Adjust if Node.js app listens on diff port
+          env:
+            - name: DATABASE_URL
+              value: #mysql://username:password@mysql-service:3306/db_name  # Replace with your MySQL connection details
+            # Other environment variables needed for your Node.js app
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: users-service
+spec:
+  selector:
+    app: users
+  ports:
+    - protocol: TCP
+      port: 80  # Exposed port for accessing the Node.js app
+      targetPort: 3000  # PortNode.js app is listening on
+  type: LoadBalancer  # Type 
