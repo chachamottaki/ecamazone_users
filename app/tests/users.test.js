@@ -25,11 +25,7 @@ describe('API /users', () => {
       email: 'test@example.com',
       phoneNumber: '1234567890',
       shippingAddress: '123 Test Street, Test City',
-      billingAddress: '456 Billing Street, Billing City',
-      cardHolderName: 'Test User',
-      cardLastFourDigits: '1234',
-      cardExpirationDate: '12/23',
-      cardType: 'Visa',
+
       password: 'password123'
     };
 
@@ -52,11 +48,6 @@ describe('API /users', () => {
         email: 'test@example.com',
         phoneNumber: '1234567890',
         shippingAddress: '123 Test Street, Test City',
-        billingAddress: '456 Billing Street, Billing City',
-        cardHolderName: 'Test User',
-        cardLastFourDigits: '1234',
-        cardExpirationDate: '12/23',
-        cardType: 'Visa',
         password: 'password123'
       };
   
@@ -78,11 +69,6 @@ describe('API /users', () => {
           email: 'test@example.com',
           phoneNumber: '1234567890',
           shippingAddress: '123 Test Street, Test City',
-          billingAddress: '456 Billing Street, Billing City',
-          cardHolderName: 'Test User',
-          cardLastFourDigits: '1234',
-          cardExpirationDate: '12/23',
-          cardType: 'Visa',
           password: 'password123'
         };
     
@@ -95,11 +81,6 @@ describe('API /users', () => {
           email: 'Updatedtest@example.com',
           phoneNumber: '0987654321',
           shippingAddress: 'Updated 123 Test Street',
-          billingAddress: 'Updated 456 Billing Street',
-          cardHolderName: 'Updated Test User',
-          cardLastFourDigits: '4321',
-          cardExpirationDate: '01/25',
-          cardType: 'MasterCard'
           // ...autres champs à mettre à jour
         };
     
@@ -139,11 +120,6 @@ describe('API /users', () => {
           email: 'test@example.com',
           phoneNumber: '1234567890',
           shippingAddress: '123 Test Street, Test City',
-          billingAddress: '456 Billing Street, Billing City',
-          cardHolderName: 'Test User',
-          cardLastFourDigits: '1234',
-          cardExpirationDate: '12/23',
-          cardType: 'Visa',
           password: 'password123'
         };
     

@@ -28,8 +28,7 @@ app.use(cors())
     // Créer un nouvel utilisateur
     app.post('/users', async (req, res) => {
       const {
-          username, fullName, email, phoneNumber, shippingAddress, billingAddress,
-          cardHolderName, cardLastFourDigits, cardExpirationDate, cardType, password
+          username, fullName, email, phoneNumber, shippingAddress,  password
       } = req.body;
   
       const hashedPassword = await bcrypt.hash(password, 10);
@@ -40,11 +39,6 @@ app.use(cors())
           email,
           phoneNumber,
           shippingAddress,
-          billingAddress,
-          cardHolderName,
-          cardLastFourDigits,
-          cardExpirationDate,
-          cardType,
           password: hashedPassword,
       })
       .then((user) => {
@@ -78,14 +72,12 @@ app.use(cors())
     app.put('/users/:userId', (req, res) => {
       const userId = req.params.userId;
       const {
-          username, fullName, email, phoneNumber, shippingAddress, billingAddress,
-          cardHolderName, cardLastFourDigits, cardExpirationDate, cardType
+          username, fullName, email, phoneNumber, shippingAddress, 
       } = req.body;
   
       User.update(
           {
-              username, fullName, email, phoneNumber, shippingAddress, billingAddress,
-              cardHolderName, cardLastFourDigits, cardExpirationDate, cardType
+              username, fullName, email, phoneNumber, shippingAddress, 
           },
           { where: { id: userId } }
       )
