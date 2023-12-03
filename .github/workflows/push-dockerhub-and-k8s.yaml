@@ -1,7 +1,6 @@
 # This workflow will push docker image of the app to docker hub and deploy the containerized app (docker) to kubernetes
 
-name: Push to docker hub
-
+name: build and deploy
 on:
   push:
     branches: [ "main" ]
@@ -10,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: build docker image and push to docker hub
     runs-on: ubuntu-latest
     
     steps:   
@@ -34,15 +34,20 @@ jobs:
         context: app
         
   deploy:
+    name: Deploy to Kubernetes
     runs-on: ubuntu-latest
     steps:
     - name: checkout code
       uses: actions/checkout@v3
-      
-    - name: Configure Kubernetes CLI
-      uses: azure/k8s-set-context@v3
-      with:
-        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+    
+    - name: Create kubeconfig
+      run: |
+        mkdir ${HOME}/.kube
+        echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
+        cat ${HOME}/.kube/config
+        
+    - name: Use context
+      run: kubectl config use-context octobay-api
 
     - name: Deploy to Kubernetes
       run: kubectl apply -f ../../app/kube.yaml
