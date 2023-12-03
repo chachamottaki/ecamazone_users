@@ -45,9 +45,6 @@ jobs:
         mkdir ${HOME}/.kube
         echo ${{ secrets.KUBE_CONFIG }} | base64 --decode > ${HOME}/.kube/config
         cat ${HOME}/.kube/config
-        
-    - name: Use context
-      run: kubectl config use-context minikube
 
     - name: Deploy to Kubernetes
       run: kubectl apply -f ../../app/kube.yaml
