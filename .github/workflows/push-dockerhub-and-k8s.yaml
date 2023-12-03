@@ -15,6 +15,18 @@ jobs:
     steps:   
     - name: checkout code
       uses: actions/checkout@v3
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18.18.0' # Mise à jour à la version 18.18.0 de Node.js
+
+    - name: Install dependencies
+      run: npm install
+      working-directory: ./app
+
+    - name: Run tests
+      run: npm test
+      working-directory: ./app
     
     #Docker
     - name: Set up Docker Buildx
@@ -48,7 +60,7 @@ jobs:
     - name: Use Minikube context
       run: kubectl config use-context minikube
     - name: Deploy to Kubernetes
-      run: kubectl apply -f ../../app/appPod.yaml
+      run: kubectl apply -f ./app/appPod.yaml
     
 
   
