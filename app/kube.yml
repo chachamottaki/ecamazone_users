@@ -13,15 +13,11 @@ spec:
         app: users
     spec:
       containers:
-        - name: users-container
-          image:   # Docker image
+        - name: backend
+          image: anouarelanda/monapp-nodejs:v1.1
           ports:
-            - containerPort: 3000  # Adjust if Node.js app listens on diff port
-          env:
-            - name: DATABASE_URL
-              value: #mysql://username:password@mysql-service:3306/db_name  # Replace with your MySQL connection details
-            # Other environment variables needed for your Node.js app
-
+            - containerPort: 3000  # port your backend app listens on
+      
 ---
 apiVersion: v1
 kind: Service
