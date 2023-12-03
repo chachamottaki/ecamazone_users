@@ -47,11 +47,6 @@ jobs:
         cat ${HOME}/.kube/config
     - name: Use Minikube context
       run: kubectl config use-context minikube
-    - name: Update Kubernetes deployment image
-      run: |
-        sed -i "s|anouarelanda/monapp-nodejs:latest|anouarelanda/monapp-nodejs:${{ github.sha }}|g" ../../app/appPod.yaml
-
-
     - name: Deploy to Kubernetes
       run: kubectl apply -f ../../app/appPod.yaml
     
