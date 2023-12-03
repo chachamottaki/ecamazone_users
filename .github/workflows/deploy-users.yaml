@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # Fit will also deploy the containerized app (docker) to kubernetes
 
-name: Deploy to Kubernetes 
+name: push to docker hub
 
 on:
   push:
@@ -38,25 +38,7 @@ jobs:
     - name: Push Docker image to registry
       run: docker push notchai/ecamazon_users:latest
       
-  #Kubernetes
-  deploy: 
-    needs: build
-    runs-on: ubuntu-latest
-    
-    steps:
-    - uses: azure/setup-kubectl@v3
-      with:
-       version: 'v1.28.4'
-      id: install
-      
-    - name: Configure kubectl
-      uses: azure/k8s-set-context@v1
-      with:
-        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
-          
-    - name: Deploy to Kubernetes
-      run: |
-          kubectl apply -f kube.yml
+ 
           
 
   
