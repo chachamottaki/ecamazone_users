@@ -16,7 +16,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
+          MYSQL_DATABASE: user_microservice
         ports:
           - 3306:3306
         options: >-
