@@ -1,7 +1,7 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # Fit will also deploy the containerized app (docker) to kubernetes
 
-name: Node.js CI
+name: Deploy to Kubernetes 
 
 on:
   push:
@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+    - name: Use Node.js 12
+      uses: actions/setup-node@v2
+      with:
+        node-version: '12'
+        
     - name: checkout code
       uses: actions/checkout@v3
     
