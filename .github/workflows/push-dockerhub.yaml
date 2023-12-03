@@ -32,7 +32,20 @@ jobs:
         push: true
         tags: docchai/ecamazon_users:latest
         context: app
+        
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: checkout code
+      uses: actions/checkout@v3
       
+    - name: Configure Kubernetes CLI
+      uses: azure/k8s-set-context@v1
+      with:
+        kubeconfig: ${{ secrets.KUBE_CONFIG_DATA }}
+
+    - name: Deploy to Kubernetes
+      run: kubectl apply -f ../../app/kube.yaml
  
 
   
