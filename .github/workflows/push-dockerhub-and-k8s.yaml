@@ -1,6 +1,5 @@
-# This workflow will push docker image of the app to docker hub and deploy the containerized app (docker) to kubernetes
-
 name: build and deploy
+
 on:
   push:
     branches: [ "main" ]
@@ -11,6 +10,20 @@ jobs:
   build:
     name: build docker image and push to docker hub
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: testdb
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h localhost -uroot -proot"
+          --health-interval 10s
+          --health-timeout 10s
+          --health-retries 5
     
     steps:   
     - name: checkout code
@@ -24,9 +37,19 @@ jobs:
       run: npm install
       working-directory: ./app
 
+    - name: Wait for MySQL
+      run: sleep 10
+
     - name: Run tests
       run: npm test
       working-directory: ./app
+      env:
+        TEST_DB_HOST: 127.0.0.1
+        TEST_DB_PORT: 3306
+        TEST_DB_NAME: testdb
+        TEST_DB_USER: root
+        TEST_DB_PASSWORD: root
+        PORT: 4000
     
     #Docker
     - name: Set up Docker Buildx
@@ -61,6 +84,4 @@ jobs:
       run: kubectl config use-context minikube
     - name: Deploy to Kubernetes
       run: kubectl apply -f ./app/appPod.yaml
-    
 
-  
