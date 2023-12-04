@@ -2,6 +2,7 @@ const request = require('supertest');
 const app = require('../server.js'); // Mettez à jour le chemin
 const db = require('../models/index');
 const { sequelize } = db;
+const bcrypt = require('bcrypt');
 let server;
 
 
