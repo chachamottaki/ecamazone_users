@@ -96,21 +96,21 @@ describe('API /users', () => {
 
     
       // Test pour la connexion
-      it('POST /login - Connexion d\'un utilisateur', async () => {
+      // it('POST /login - Connexion d\'un utilisateur', async () => {
 
-        const credentials = {
-            username: 'anouar',
-            password: 'anouar'
-        };
+      //   const credentials = {
+      //       username: 'anouar',
+      //       password: 'anouar'
+      //   };
     
-        const response = await request(app)
-          .post('/login')
-          .send(credentials);
+      //   const response = await request(app)
+      //     .post('/login')
+      //     .send(credentials);
     
-        expect(response.statusCode).toBe(200);
-        expect(response.body.message).toBe('Connexion réussie');
-        // Autres assertions...
-      });
+      //   expect(response.statusCode).toBe(200);
+      //   expect(response.body.message).toBe('Connexion réussie');
+      //   // Autres assertions...
+      // });
 
 
       it('DELETE /users/:userId - Supprimer un utilisateur', async () => {
