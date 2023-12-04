@@ -46,7 +46,7 @@ jobs:
 
 
     - name: Run tests
-      run: npm test
+      run: npm test -- --detectOpenHandles
       working-directory: ./app
       env:
         TEST_DB_HOST: 127.0.0.1
