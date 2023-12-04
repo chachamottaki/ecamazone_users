@@ -105,6 +105,38 @@ describe('API /users', () => {
         // Autres assertions...
       });
     
+      it('POST /login - Connexion d\'un utilisateur', async () => {
+        // Créer un utilisateur spécifique pour ce test
+        const testUser = {
+          username: 'loginTestUser',
+          fullName: 'Login Test User',
+          email: 'login_test@example.com',
+          phoneNumber: '1234567890',
+          shippingAddress: '123 Login Street, Test City',
+          password: bcrypt.hash('loginPassword123', 10)
+        };
+      
+        const createdUser = await User.create(testUser);
+        createdUserId = createdUser.id; // Sauvegarder l'ID pour la suppression
+      
+        // Test de la connexion
+        const credentials = {
+          username: 'loginTestUser',
+          password: 'loginPassword123'
+        };
+      
+        const response = await request(app)
+          .post('/login')
+          .send(credentials);
+      
+        expect(response.statusCode).toBe(200);
+        expect(response.body.message).toBe('Connexion réussie');
+      
+        // Supprimer l'utilisateur créé pour ce test
+        if (createdUserId) {
+          await User.destroy({ where: { id: createdUserId } });
+        }
+      });
 
     
       // Test pour la connexion
