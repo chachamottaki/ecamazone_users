@@ -108,13 +108,15 @@ describe('API /users', () => {
     
       it('POST /login - Connexion d\'un utilisateur', async () => {
         // Créer un utilisateur spécifique pour ce test
+        const hashedPassword = await bcrypt.hash('loginPassword123', 10);
+
         const testUser = {
           username: 'loginTestUser',
           fullName: 'Login Test User',
           email: 'login_test@example.com',
           phoneNumber: '1234567890',
           shippingAddress: '123 Login Street, Test City',
-          password: bcrypt.hash('loginPassword123', 10)
+          password: hashedPassword
         };
       
         const createdUser = await User.create(testUser);
