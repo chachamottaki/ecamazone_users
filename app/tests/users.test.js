@@ -2,19 +2,22 @@ const request = require('supertest');
 const app = require('../server.js'); // Mettez à jour le chemin
 const db = require('../models/index');
 const { sequelize } = db;
+let server;
+
 
 const User = db.User;
 
 describe('API /users', () => {
     let testUserId;
-    let server;
 
-    beforeAll(done => {
-      server = app.listen(4000, done); // Démarre le serveur sur un port spécifique
+
+  
+    beforeAll(() => {
+      server = app.listen(4000); // Démarrer le serveur sur un port spécifique pour les tests
     });
   
-    afterAll(done => {
-      server.close(done); // Ferme le serveur à la fin des tests
+    afterAll(() => {
+      server.close(); // Fermer le serveur après les tests
     });
     
 

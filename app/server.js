@@ -8,9 +8,8 @@
 
 
     const app = express();
-    const port = process.env.PORT || 3000;
     let cors = require('cors')
-app.use(cors())
+    app.use(cors())
 
     // Synchronisez le modèle avec la base de données (créez la table si elle n'existe pas)
     sequelize.sync()
@@ -111,35 +110,40 @@ app.use(cors())
           res.status(500).json({ error: 'Erreur interne du serveur' });
         });
     });
+    // Route de connexion
+    app.post('/login', async (req, res) => {
+      const { username, password } = req.body;
 
-    app.listen(port, () => {
-      console.log(`Le serveur fonctionne sur le port ${port}`);
+      // Recherchez l'utilisateur par nom d'utilisateur
+      const user = await User.findOne({ where: { username } });
+
+      if (!user) {
+        return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
+
+      // Vérifiez le mot de passe haché
+      const passwordMatch = await bcrypt.compare(password, user.password);
+
+      if (passwordMatch) {
+        // Renvoyez l'ID de l'utilisateur dans la réponse
+        res.status(200).json({ message: 'Connexion réussie', id: user.id });
+      } else {
+        res.status(401).json({ error: 'Mauvais mot de passe' });
+      }
     });
 
+    // app.listen(port, () => {
+    //   console.log(`Le serveur fonctionne sur le port ${port}`);
+    // });
 
-    // Route de connexion
-// Route de connexion
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+    // Condition pour vérifier si le script est exécuté directement
+    if (require.main === module) {
+      const port = process.env.PORT || 3000;
+      app.listen(port, () => {
+        console.log(`Le serveur fonctionne sur le port ${port}`);
+      });
+    }
 
-  // Recherchez l'utilisateur par nom d'utilisateur
-  const user = await User.findOne({ where: { username } });
 
-  if (!user) {
-    return res.status(404).json({ error: 'Utilisateur non trouvé' });
-  }
 
-  // Vérifiez le mot de passe haché
-  const passwordMatch = await bcrypt.compare(password, user.password);
-
-  if (passwordMatch) {
-    // Renvoyez l'ID de l'utilisateur dans la réponse
-    res.status(200).json({ message: 'Connexion réussie', id: user.id });
-  } else {
-    res.status(401).json({ error: 'Mauvais mot de passe' });
-  }
-});
-
-      
-
-    module.exports = app;
+module.exports = app;
