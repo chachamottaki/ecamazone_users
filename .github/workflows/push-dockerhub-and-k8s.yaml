@@ -46,7 +46,7 @@ jobs:
       env:
         TEST_DB_HOST: 127.0.0.1
         TEST_DB_PORT: 3306
-        TEST_DB_NAME: testdb
+        TEST_DB_NAME: user_microservice
         TEST_DB_USER: root
         TEST_DB_PASSWORD: root
         PORT: 4000
