@@ -7,6 +7,15 @@ const User = db.User;
 
 describe('API /users', () => {
     let testUserId;
+    let server;
+
+    beforeAll(done => {
+      server = app.listen(4000, done); // Démarre le serveur sur un port spécifique
+    });
+  
+    afterAll(done => {
+      server.close(done); // Ferme le serveur à la fin des tests
+    });
     
 
 
