@@ -24,7 +24,6 @@ const User = db.define('User', {
     },
     shippingAddress: {
       type: Sequelize.STRING,
-      // Vous pouvez diviser en plusieurs champs (rue, ville, code postal, pays) si nécessaire
     },
   isAdmin: {
     type: Sequelize.BOOLEAN,
