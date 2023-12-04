@@ -10,5 +10,4 @@ const sequelize = new Sequelize(
     port: process.env.TEST_DB_PORT || 3306
   }
 );
-
 module.exports = sequelize;
