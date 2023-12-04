@@ -40,6 +40,11 @@ jobs:
     - name: Wait for MySQL
       run: sleep 10
 
+    - name: Insert Test User in Database
+      run: |
+        mysql -h 127.0.0.1 -u root -proot -e "INSERT INTO user_microservice.Users (username, fullName, email, phoneNumber, shippingAddress, isAdmin, password, createdAt, updatedAt) VALUES ('anouar', 'Nom Complet', 'email@example.com', '0123456789', '123 Rue Exemple, Ville, CodePostal', 0, '$2b$10$0UyhLHT2vtWjyL7TLma81uKq.RmW5Jy3yLfRx.zKL3Kuair2hMLuG', '2023-12-03 21:33:47', '2023-12-03 21:33:47');"
+
+
     - name: Run tests
       run: npm test
       working-directory: ./app
