@@ -65,23 +65,23 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        tags: docchai/ecamazon_users:latest
+        tags: anouarelanda/monapp-nodejs:latest
         context: app
         
-  deploy:
-    name: Deploy to Kubernetes
-    runs-on: ubuntu-latest
-    steps:
-    - name: checkout code
-      uses: actions/checkout@v3
-    
-    - name: Create kubeconfig
-      run: |
-        mkdir ${HOME}/.kube
-        echo ${{ secrets.KUBE_CONFIG_DATA }} | base64 --decode > ${HOME}/.kube/config
-        cat ${HOME}/.kube/config
-    - name: Use Minikube context
-      run: kubectl config use-context minikube
-    - name: Deploy to Kubernetes
-      run: kubectl apply -f ./app/appPod.yaml
+#  deploy:
+#    name: Deploy to Kubernetes
+#    runs-on: ubuntu-latest
+#    steps:
+#    - name: checkout code
+#      uses: actions/checkout@v3
+#    
+#    - name: Create kubeconfig
+#      run: |
+#        mkdir ${HOME}/.kube
+#        echo ${{ secrets.KUBE_CONFIG_DATA }} | base64 --decode > ${HOME}/.kube/config
+#        cat ${HOME}/.kube/config
+#    - name: Use Minikube context
+#      run: kubectl config use-context minikube
+#    - name: Deploy to Kubernetes
+#      run: kubectl apply -f ./app/appPod.yaml
 
