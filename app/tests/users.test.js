@@ -178,6 +178,39 @@ describe('API /users', () => {
         expect(response.statusCode).toBe(204);
         // Autres assertions...
       });
+      it('POST /change-password/:userId - Changement de mot de passe d\'un utilisateur', async () => {
+        // Créer un utilisateur pour le test
+        const hashedPassword = await bcrypt.hash('oldPassword123', 10);
+        const testUser = {
+            username: 'changePassUser',
+            fullName: 'Change Pass User',
+            email: 'change_pass@example.com',
+            phoneNumber: '1234567890',
+            shippingAddress: '123 Change Pass Street',
+            password: hashedPassword
+        };
+    
+        const createdUser = await User.create(testUser);
+        testUserId = createdUser.id;
+    
+        // Données pour le changement de mot de passe
+        const passwordData = {
+            oldPassword: 'oldPassword123',
+            newPassword: 'newPassword123'
+        };
+    
+        // Envoi de la requête de changement de mot de passe
+        const response = await request(app)
+          .post(`/change-password/${testUserId}`)
+          .send(passwordData);
+    
+        expect(response.statusCode).toBe(200); // Assurez-vous que cela correspond à votre implémentation
+        expect(response.body.message).toBe('Mot de passe mis à jour avec succès');
+    
+        // Nettoyage: Supprimer l'utilisateur de test
+        await User.destroy({ where: { id: testUserId } });
+    });
+    
 
   // Ajoutez des tests pour GET, PUT, DELETE, etc.
 });

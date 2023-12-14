@@ -131,10 +131,37 @@
         res.status(401).json({ error: 'Mauvais mot de passe' });
       }
     });
+    // Route pour changer le mot de passe
+app.post('/change-password/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const { oldPassword, newPassword } = req.body;
 
-    // app.listen(port, () => {
-    //   console.log(`Le serveur fonctionne sur le port ${port}`);
-    // });
+  try {
+      // Trouvez l'utilisateur par ID
+      const user = await User.findByPk(userId);
+      if (!user) {
+          return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
+
+      // Vérifiez l'ancien mot de passe
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+          return res.status(401).json({ error: 'Ancien mot de passe incorrect' });
+      }
+
+      // Hachez le nouveau mot de passe et mettez à jour
+      const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+      user.password = hashedNewPassword;
+      await user.save();
+
+      res.status(200).json({ message: 'Mot de passe mis à jour avec succès' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+
 
     // Condition pour vérifier si le script est exécuté directement
     if (require.main === module) {
