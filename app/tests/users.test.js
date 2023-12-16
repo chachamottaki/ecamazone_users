@@ -148,6 +148,31 @@ it('DELETE /users/:userId - Supprimer un utilisateur', async () => {
   const response = await request(app).delete(`/users/${testUserId}`);
   expect(response.statusCode).toBe(204);
 });
+it('GET /users/:userId - Récupérer les détails d\'un utilisateur', async () => {
+  const response = await request(app).get(`/users/${testUserId}`);
+  expect(response.statusCode).toBe(200);
+  expect(response.body).toHaveProperty('id', testUserId);
+  expect(response.body).toHaveProperty('username', 'testuser');
+  // Ajoutez d'autres assertions pour les champs que vous attendez
+});
+it('PUT /users/:userId - Mettre à jour les informations d\'un utilisateur', async () => {
+  const updatedUser = {
+      username: 'Updated testUser',
+      fullName: 'Updated Test User',
+      email: 'updated@example.com',
+      phoneNumber: '9876543210',
+      // Ajoutez d'autres champs que vous souhaitez tester
+  };
+
+  const response = await request(app)
+      .put(`/users/${testUserId}`)
+      .send(updatedUser);
+
+  expect(response.statusCode).toBe(200);
+  expect(response.body.message).toBe('Utilisateur mis à jour avec succès');
+  // Autres assertions pour vérifier la mise à jour
+});
+
 
 // ...
 
