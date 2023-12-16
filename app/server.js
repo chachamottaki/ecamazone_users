@@ -2,6 +2,8 @@
     const bcrypt = require('bcrypt');
     const db = require('./models/index');
     const User = db.User;
+    const Address = db.Address;
+
     const sequelize = require('./db.js');
 
 
@@ -37,7 +39,7 @@
           fullName,
           email,
           phoneNumber,
-          shippingAddress,
+          // shippingAddress,
           password: hashedPassword,
       })
       .then((user) => {
@@ -76,7 +78,8 @@
   
       User.update(
           {
-              username, fullName, email, phoneNumber, shippingAddress, 
+              username, fullName, email, phoneNumber, 
+              // shippingAddress, 
           },
           { where: { id: userId } }
       )
@@ -155,6 +158,83 @@ app.post('/change-password/:userId', async (req, res) => {
       await user.save();
 
       res.status(200).json({ message: 'Mot de passe mis à jour avec succès' });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+
+app.post('/users/:userId/addresses', async (req, res) => {
+  const { street, city, zipCode, country } = req.body;
+  const userId = req.params.userId;
+
+  try {
+      const user = await User.findByPk(userId);
+      if (!user) {
+          return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
+
+      const address = await Address.create({
+          street, city, zipCode, country, UserId: userId
+      });
+
+      res.status(201).json(address);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+app.put('/addresses/:addressId', async (req, res) => {
+  const { street, city, zipCode, country } = req.body;
+  const addressId = req.params.addressId;
+
+  try {
+      const address = await Address.findByPk(addressId);
+      if (!address) {
+          return res.status(404).json({ error: 'Adresse non trouvée' });
+      }
+
+      address.street = street;
+      address.city = city;
+      address.zipCode = zipCode;
+      address.country = country;
+      await address.save();
+
+      res.status(200).json(address);
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+app.delete('/addresses/:addressId', async (req, res) => {
+  const addressId = req.params.addressId;
+
+  try {
+      const address = await Address.findByPk(addressId);
+      if (!address) {
+          return res.status(404).json({ error: 'Adresse non trouvée' });
+      }
+
+      await address.destroy();
+      res.status(204).send();
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Erreur interne du serveur' });
+  }
+});
+app.get('/users/:userId/addresses', async (req, res) => {
+  const userId = req.params.userId;
+
+  try {
+      const user = await User.findByPk(userId, {
+          include: [Address] // Assurez-vous que 'Address' est correctement importé et associé
+      });
+
+      if (user) {
+          res.status(200).json(user.Addresses);
+      } else {
+          res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Erreur interne du serveur' });
