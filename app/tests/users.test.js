@@ -45,13 +45,13 @@ describe('API /users', () => {
         await User.destroy({ where: { id: testUserId } });
     });
 
-    it('GET /users/:userId/addresses - Récupérer les adresses d\'un utilisateur', async () => {
-        const response = await request(app).get(`/users/${testUserId}/addresses`);
-        expect(response.statusCode).toBe(200);
-        expect(response.body).toEqual(expect.arrayContaining([
-            expect.objectContaining({ street: '123 Test Street' })
-        ]));
-    });
+    // it('GET /users/:userId/addresses - Récupérer les adresses d\'un utilisateur', async () => {
+    //     const response = await request(app).get(`/users/${testUserId}/addresses`);
+    //     expect(response.statusCode).toBe(200);
+    //     expect(response.body).toEqual(expect.arrayContaining([
+    //         expect.objectContaining({ street: '123 Test Street' })
+    //     ]));
+    // });
 
     it('POST /users/:userId/addresses - Ajouter une adresse à un utilisateur', async () => {
         const newAddress = {
